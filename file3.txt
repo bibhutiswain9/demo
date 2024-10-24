@@ -4,3 +4,4 @@ Making changes to file3.txt
 Making changes to file3.txt
 Making changes to file3.txt
 Making changes to file3.txt
+Making changes to file3.txt
