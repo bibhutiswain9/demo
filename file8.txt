@@ -1,1 +1,2 @@
 Making changes to file8.txt
+Making changes to file8.txt
