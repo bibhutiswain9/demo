@@ -9,15 +9,24 @@ done
 git add .
 git commit -m "Updated 10 files"
 
-# Step 3: Create new branch and push
+# Step 3: Create new branch and check if it exists on remote
 BRANCH_NAME="update-10-files"
-git checkout -b $BRANCH_NAME
-git push origin $BRANCH_NAME
 
-# Step 4: Create a Pull Request
-PR_URL=$(gh pr create --title "Feature: Updated 10 files" --body "This PR updates 10 files" --base main --head $BRANCH_NAME --json url -q ".url")
+# Check if the branch already exists on remote, if yes, rebase it
+if git ls-remote --exit-code origin $BRANCH_NAME; then
+  echo "Branch $BRANCH_NAME exists on remote, pulling remote changes..."
+  git fetch origin $BRANCH_NAME
+  git checkout $BRANCH_NAME
+  git rebase origin/$BRANCH_NAME
+else
+  git checkout -b $BRANCH_NAME
+fi
 
-echo "Pull Request created: $PR_URL"
+# Push the branch to the remote
+git push origin $BRANCH_NAME --force
+
+# Step 4: Create a Pull Request (no --json flag to avoid unknown flag issue)
+gh pr create --title "Feature: Updated 10 files" --body "This PR updates 10 files" --base main --head $BRANCH_NAME
 
 # Step 5: Merge the PR
 gh pr merge $BRANCH_NAME --squash --delete-branch --comment "Merging this PR with squash."
