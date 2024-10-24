@@ -15,8 +15,13 @@ git checkout -b $BRANCH_NAME
 git push origin $BRANCH_NAME
 
 # Step 4: Create a Pull Request
-gh pr create --title "Feature: Updated 10 files" --body "This PR updates 10 files" --base main --head $BRANCH_NAME
+PR_URL=$(gh pr create --title "Feature: Updated 10 files" --body "This PR updates 10 files" --base main --head $BRANCH_NAME --json url -q ".url")
 
-# Step 5: Merge PR (optional) or close PR
-# gh pr merge --squash --delete-branch
-# gh pr close $BRANCH_NAME
+echo "Pull Request created: $PR_URL"
+
+# Step 5: Close the PR without merging
+gh pr close $BRANCH_NAME --comment "Closing this PR without merging."
+
+# Step 6: Delete the branch locally
+git checkout main
+git branch -D $BRANCH_NAME
